@@ -1,5 +1,6 @@
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-var HTMLWebpackPlugin = require("html-webpack-plugin");
+const HTMLWebpackPlugin = require("html-webpack-plugin");
+const path = require("path");
+
 var HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
     template: __dirname + "/index.html",
     filename: "index.html",
@@ -9,18 +10,28 @@ var HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
 
 module.exports={
     mode: "development",
-    entry: __dirname + '/src/index.js',
+    entry: {
+       index: __dirname + '/src/index.js'
+    },
     module:{
         rules:[
             {
                 test: /\.js$/,
-                exclude: /node_modules/,
+                exclude: /(node_modules | components)/,
                 use: ['babel-loader']
+            },
+            {
+                test: /\.css$/,
+                exclude: /node_modules/,
+                use: ['style-loader',"css-loader"]
             }
         ]
     },
+    devServer:{
+        port: 5500
+    },
     output: {
-        filename: 'bundle.js',
+        filename: '[name].bundle.js',
         path:__dirname + "/build",
         clean: true
     },
